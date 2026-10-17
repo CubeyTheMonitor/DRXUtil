@@ -73,6 +73,26 @@ const char* kRegionStrings[] = {
 
 InfoScreen::InfoScreen()
 {
+    
+    // Read selected TV remote IDs from GamePad EEPROM
+    uint8_t tvIds[10]{};
+
+    if (GetEepromValue(0x289, std::span<uint8_t>(tvIds))) {
+        mExtIdList.push_back({"TV remote ID 1:",
+            Utils::sprintf("%02X %02X %02X %02X %02X",
+                tvIds[0], tvIds[1], tvIds[2],
+                tvIds[3], tvIds[4])});
+
+        mExtIdList.push_back({"TV remote ID 2:",
+            Utils::sprintf("%02X %02X %02X %02X %02X",
+                tvIds[5], tvIds[6], tvIds[7],
+                tvIds[8], tvIds[9])});
+    } else {
+        mExtIdList.push_back({
+            "TV remote IDs:", "Read/CRC failed"
+        });
+    }
+
     CCRCDCSoftwareVersion softwareVersion;
     if (CCRCDCSoftwareGetVersion(CCR_CDC_DESTINATION_DRC0, &softwareVersion) == 0) {
         uint32_t v = softwareVersion.runningVersion;
