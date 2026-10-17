@@ -4,7 +4,7 @@
 
 #include <nsysccr/cdc.h>
 #include <nsysccr/cfg.h>
-
+// h
 namespace {
 
 bool GetEepromValue(uint32_t offset, std::span<uint8_t> value)
